@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Excel аралы</title>
+<style>
+:root{--bg:#fff8e7;--card:#ffffff;--ink:#1d2b3a;--mut:#5a6b7b;--pri:#1f8a70;--priInk:#fff;--hl:#ffd23f;--ok:#2e9e5b;--bad:#e4572e;--line:#1d2b3a;--head:#cfe8ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--fs:20px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14202b;--card:#1d2d3c;--ink:#f3f6f9;--mut:#a9b8c6;--pri:#3cc4a0;--priInk:#08231c;--hl:#e0b420;--line:#f3f6f9;--head:#2d4a68}}
+:root[data-theme="dark"]{--bg:#14202b;--card:#1d2d3c;--ink:#f3f6f9;--mut:#a9b8c6;--pri:#3cc4a0;--priInk:#08231c;--hl:#e0b420;--line:#f3f6f9;--head:#2d4a68}
+body.hc{--bg:#000;--card:#000;--ink:#fff;--mut:#fff;--pri:#ffe600;--priInk:#000;--hl:#00d5ff;--line:#fff;--head:#333;--ok:#3db2ff;--bad:#ff9f1a}
+body.big{--fs:26px}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;font-size:var(--fs);line-height:1.4;min-height:100vh}
+main{max-width:640px;margin:0 auto;padding:14px 14px 40px}
+h1{font-size:1.6em;margin:.2em 0}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.tg{font:inherit;font-size:.7em;border:3px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:8px 12px;cursor:pointer}
+.tg[aria-pressed="true"]{background:var(--pri);color:var(--priInk)}
+.card{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:16px;margin:10px 0}
+.btn{display:block;width:100%;font:inherit;font-weight:700;border:3px solid var(--line);background:var(--pri);color:var(--priInk);border-radius:18px;padding:16px;margin:10px 0;cursor:pointer;min-height:64px;text-align:left}
+.btn.alt{background:var(--card);color:var(--ink)}
+.btn.ok{background:var(--ok);color:#000}
+.btn.no{background:var(--bad);color:#000}
+.btn small{display:block;font-weight:400;font-size:.7em;margin-top:2px}
+:focus-visible{outline:5px solid var(--hl);outline-offset:3px}
+.top{display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.stage{font-weight:700;color:var(--mut);font-size:.8em;margin-top:4px}
+.dots{display:flex;gap:6px;margin:8px 0}
+.dots i{flex:1;height:12px;border-radius:6px;border:2px solid var(--line);background:var(--card)}
+.dots i.on{background:var(--ok)}
+.q{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.q p{margin:0;font-weight:700}
+.spk{flex:none;width:60px;height:60px;font-size:28px;border-radius:50%;border:3px solid var(--line);background:var(--hl);cursor:pointer}
+table{border-collapse:collapse;margin:12px auto;width:100%;table-layout:fixed}
+td,th{border:3px solid var(--line);text-align:center;height:62px;padding:2px;font-size:1em}
+th{background:var(--head)}
+td.hl,th.hl{background:var(--hl);color:#000}
+td.ok{background:var(--ok);color:#000}
+td.no{background:var(--bad);color:#000}
+.cell{width:100%;height:56px;background:none;border:0;font:inherit;color:inherit;cursor:pointer}
+.msg{font-weight:700;min-height:1.6em;margin:6px 0}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.big-emoji{font-size:3em;text-align:center}
+.hide{display:none}
+p.lead{color:var(--mut);margin:.4em 0 1em}
+.ans{display:flex;gap:8px}
+.ans input{flex:1;min-width:0;font:inherit;border:3px solid var(--line);border-radius:14px;padding:12px;background:var(--card);color:var(--ink)}
+.ans .btn{width:auto;margin:0;text-align:center}
+</style>
+</head>
+<body>
+<main>
+  <div class="bar" role="group" aria-label="Баптаулар">
+    <button class="tg" id="tHc" aria-pressed="false">Дальтоник режимі</button>
+    <button class="tg" id="tBig" aria-pressed="false">Үлкен әріп</button>
+    <button class="tg" id="tVoice" aria-pressed="true">Дыбыс</button>
+  </div>
+
+  <section id="start" class="card">
+    <div class="big-emoji" aria-hidden="true">🏝️</div>
+    <h1>Excel аралы</h1>
+    <p class="lead">Ойынды бастамас бұрын өзіңе ыңғайлы режимді таңда.</p>
+    <button class="btn" id="mInc">🌟 Инклюзивті режим<small>Жеңіл сұрақтар, көмек, дауыспен оқу, үлкен әріп</small></button>
+    <button class="btn alt" id="mStd">🚀 Жалпы режим<small>7-сынып деңгейі: формулалар, тест, дүкен ойыны</small></button>
+  </section>
+
+  <section id="game" class="hide">
+    <div class="card">
+      <div class="top"><span id="lvl">1 / 5</span><span id="score">⭐ 0</span></div>
+      <div class="stage" id="stage"></div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div id="grid"></div>
+      <div class="q">
+        <p id="qt" aria-live="polite"></p>
+        <button class="spk" id="spk" aria-label="Сұрақты тыңдау">🔊</button>
+      </div>
+      <div id="opts"></div>
+      <div class="ans hide" id="ansBox">
+        <input id="num" type="number" inputmode="numeric" aria-label="Жауабың">
+        <button class="btn" id="chk">Тексеру</button>
+      </div>
+      <div class="msg" id="msg" role="status" aria-live="polite"></div>
+      <button class="btn alt hide" id="next">Келесі</button>
+    </div>
+  </section>
+
+  <section id="end" class="card hide">
+    <div class="big-emoji" aria-hidden="true">🏆</div>
+    <h1 id="title">Тамаша!</h1>
+    <p class="lead" id="final"></p>
+    <button class="btn" id="again">Қайта ойнау</button>
+    <button class="btn alt" id="home">Режимді өзгерту</button>
+  </section>
+</main>
+
+<script>
+(function(){
+  var G=[[2,4,6],[3,5,7],[5,1,8],[9,2,4]];
+  var S1='1-кезең: Танысу',S2='2-кезең: Тест',S3='3-кезең: Ұяшық аңшысы',S4='4-кезең: Дүкен';
+
+  var INC=[
+    {st:S1,t:'c',q:'Сары түспен белгіленген ұяшықтың аты қандай?',hl:[[1,1]],opts:['B2','2B'],ans:0},
+    {st:S1,t:'c',q:'Сары түспен белгіленген баған қалай аталады?',hlC:[2],opts:['3','C'],ans:1},
+    {st:S2,t:'c',q:'Excel деген не?',opts:['Ойын','Кесте бағдарламасы'],ans:1},
+    {st:S2,t:'c',q:'Формула қандай белгіден басталады?',opts:['#','='],ans:1},
+    {st:S3,t:'k',q:'C2 ұяшығын тап және бас.',target:[1,2],hintC:[2],hintR:[1],hint:'C — баған, 2 — жол. Сары түсті қара.'},
+    {st:S3,t:'k',q:'A3 ұяшығын тап және бас.',target:[2,0],hintC:[0],hintR:[2],hint:'A — баған, 3 — жол. Сары түсті қара.'},
+    {st:S4,t:'n',q:'Дәптер 10 теңге (A1), қалам 20 теңге (B1). =A1+B1 нәтижесі қанша?',grid:[[10,20,'']],answer:30,hint:'10 мен 20-ны қос.'}
+  ];
+
+  var STD=[
+    {st:S1,t:'c',q:'Сары түспен белгіленген ұяшықтың аты қандай?',hl:[[2,0]],opts:['A3','3A','C1'],ans:0},
+    {st:S1,t:'c',q:'Сары түспен белгіленген жолдың нөмірі қандай?',hlR:[1],opts:['B','2','1'],ans:1},
+    {st:S1,t:'c',q:'=SUM(A1:A3) формуласы қандай нәтиже береді?',hl:[[0,0],[1,0],[2,0]],opts:['8','10','12'],ans:1},
+    {st:S2,t:'c',q:'A1 мен B1 ұяшығындағы сандар үшін =A1+B1 нәтижесі қандай?',hl:[[0,0],[0,1]],opts:['24','6','8'],ans:1},
+    {st:S2,t:'c',q:'=AVERAGE(A2:C2) формуласы жолдағы сандардың нені табады?',hlR:[1],opts:['Ең үлкенін','Қосындысын','Орташа мәнін'],ans:2},
+    {st:S2,t:'c',q:'=MAX(A3:C3) нәтижесі қандай?',hlR:[2],opts:['5','8','14'],ans:1},
+    {st:S2,t:'c',q:'=B1*C1 формуласының нәтижесі қандай?',hl:[[0,1],[0,2]],opts:['10','24','46'],ans:1},
+    {st:S3,t:'k',q:'Тапсырма: C4 ұяшығын тез тап!',target:[3,2]},
+    {st:S3,t:'k',q:'Тапсырма: B3 ұяшығын тап!',target:[2,1]},
+    {st:S4,t:'n',q:'Дәптер 250 (A1), қалам 80 (B1), өшіргіш 120 (C1) теңге. =A1+B1+C1 нәтижесі қанша?',grid:[[250,80,120]],answer:450},
+    {st:S4,t:'n',q:'A1 — қалам саны (4), B1 — бағасы (80 теңге). =A1*B1 қанша болады?',grid:[[4,80,'']],answer:320}
+  ];
+
+  var $=function(id){return document.getElementById(id)};
+  var LV=[],i=0,score=0,locked=false,missed=false,inclusive=false,voiceOn=true;
+
+  function speak(t){
+    if(!voiceOn||!('speechSynthesis' in window))return;
+    speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(t),v=speechSynthesis.getVoices();
+    var kk=v.filter(function(x){return /^kk/i.test(x.lang)})[0];
+    var ru=v.filter(function(x){return /^ru/i.test(x.lang)})[0];
+    if(kk){u.voice=kk;u.lang=kk.lang}else if(ru){u.voice=ru;u.lang=ru.lang}else{u.lang='ru-RU'}
+    speechSynthesis.speak(u);
+  }
+
+  function setPressed(id,on){$(id).setAttribute('aria-pressed',on)}
+  function toggle(id,fn){
+    $(id).addEventListener('click',function(){
+      var on=$(id).getAttribute('aria-pressed')!=='true';
+      setPressed(id,on);fn(on);
+    });
+  }
+  toggle('tHc',function(on){document.body.classList.toggle('hc',on)});
+  toggle('tBig',function(on){document.body.classList.toggle('big',on)});
+  toggle('tVoice',function(on){voiceOn=on;if(!on&&window.speechSynthesis)speechSynthesis.cancel()});
+
+  function show(id){['start','game','end'].forEach(function(s){$(s).classList.toggle('hide',s!==id)})}
+  function has(a,x){return a&&a.indexOf(x)>-1}
+  function hasCell(L,r,c){
+    return (L.hl||[]).some(function(p){return p[0]===r&&p[1]===c})||has(L.hlC,c)||has(L.hlR,r);
+  }
+
+  function buildGrid(L){
+    var g=L.grid||G,cols=g[0].length,h='<table aria-label="Кесте"><tr><th></th>';
+    for(var c=0;c<cols;c++){
+      var hc=has(L.hlC,c)||(inclusive&&has(L.hintC,c));
+      h+='<th'+(hc?' class="hl"':'')+'>'+String.fromCharCode(65+c)+'</th>';
+    }
+    h+='</tr>';
+    g.forEach(function(row,r){
+      var hr=has(L.hlR,r)||(inclusive&&has(L.hintR,r));
+      h+='<tr><th'+(hr?' class="hl"':'')+'>'+(r+1)+'</th>';
+      row.forEach(function(v,c){
+        var cls=hasCell(L,r,c)?' class="hl"':'';
+        h+='<td'+cls+'>';
+        h+=L.t==='k'?'<button class="cell" data-r="'+r+'" data-c="'+c+'" aria-label="'+String.fromCharCode(65+c)+(r+1)+'">'+v+'</button>':v;
+        h+='</td>';
+      });
+      h+='</tr>';
+    });
+    return h+'</table>';
+  }
+
+  function render(){
+    var L=LV[i];locked=false;missed=false;
+    $('lvl').textContent=(i+1)+' / '+LV.length;
+    $('score').textContent='⭐ '+score;
+    $('stage').textContent=L.st;
+    $('dots').innerHTML=LV.map(function(_,k){return '<i class="'+(k<i?'on':'')+'"></i>'}).join('');
+    $('grid').innerHTML=buildGrid(L);
+    $('qt').textContent=L.q;
+    setMsg('','');
+    $('next').classList.add('hide');
+    var o=$('opts');o.innerHTML='';
+    $('ansBox').classList.toggle('hide',L.t!=='n');
+    $('num').value='';
+    if(L.t==='c'){
+      L.opts.forEach(function(t,k){
+        var b=document.createElement('button');
+        b.className='btn alt';b.textContent=t;
+        b.addEventListener('click',function(){choose(k,b)});
+        o.appendChild(b);
+      });
+    }
+    if(L.t==='k'){
+      $('grid').querySelectorAll('.cell').forEach(function(b){
+        b.addEventListener('click',function(){pick(b)});
+      });
+    }
+    speak(L.q);
+  }
+
+  function setMsg(t,c){$('msg').textContent=t;$('msg').className='msg '+c}
+
+  function win(){
+    locked=true;
+    if(!missed)score++;
+    $('score').textContent='⭐ '+score;
+    var wm=missed?'Дұрыс! Келесіде бірінші реттен тапсаң, ұпай аласың.':'Дұрыс! Жарайсың!';
+    setMsg(wm,'ok');
+    $('next').textContent=i===LV.length-1?'Нәтижені көру':'Келесі';
+    $('next').classList.remove('hide');$('next').focus();
+    speak(wm);
+  }
+  function lose(extra){
+    missed=true;
+    var t='Қайтадан байқап көр.'+(extra?' '+extra:'');
+    setMsg(t,'bad');speak(t);
+  }
+
+  function choose(k,b){
+    if(locked)return;
+    if(k===LV[i].ans){b.className='btn ok';win()}
+    else{b.className='btn no';b.disabled=true;lose()}
+  }
+  function pick(b){
+    if(locked)return;
+    var L=LV[i],td=b.parentNode;
+    if(+b.dataset.r===L.target[0]&&+b.dataset.c===L.target[1]){td.className='ok';win()}
+    else{
+      td.className='no';
+      setTimeout(function(){td.className=''},700);
+      lose(inclusive?L.hint:'Баған әрпі мен жол нөміріне назар аудар.');
+    }
+  }
+  function check(){
+    if(locked)return;
+    var L=LV[i],v=$('num').value;
+    if(v==='')return;
+    if(+v===L.answer)win();
+    else lose(inclusive?L.hint:'');
+  }
+  $('chk').addEventListener('click',check);
+  $('num').addEventListener('keydown',function(e){if(e.key==='Enter')check()});
+
+  function start(inc){
+    inclusive=inc;LV=inc?INC:STD;i=0;score=0;
+    if(inc){
+      document.body.classList.add('big');setPressed('tBig',true);
+      voiceOn=true;setPressed('tVoice',true);
+    }
+    show('game');render();
+  }
+  $('mInc').addEventListener('click',function(){start(true)});
+  $('mStd').addEventListener('click',function(){start(false)});
+  $('again').addEventListener('click',function(){start(inclusive)});
+  $('home').addEventListener('click',function(){show('start')});
+
+  $('next').addEventListener('click',function(){
+    i++;
+    if(i>=LV.length){
+      var p=score/LV.length,t;
+      if(inclusive)t='Excel жұлдызы';
+      else t=p>=0.9?'Excel батыры':p>=0.6?'Excel зерттеушісі':'Excel жаңадан бастаушысы';
+      $('title').textContent=t;
+      var g=Math.round(p*10);
+      if(inclusive)g=Math.min(10,g+2);
+      $('final').textContent='Бірінші реттен дұрыс жауап: '+score+' / '+LV.length+' ⭐. Бағаң: '+g+' / 10';
+      show('end');speak('Тамаша! Сенің атағың: '+t+'. Бағаң: он баллдан '+g+'.');
+    }else render();
+  });
+  $('spk').addEventListener('click',function(){
+    var w=voiceOn;voiceOn=true;speak(LV[i].q);voiceOn=w;
+  });
+})();
+</script>
+</body>
+</html>
